@@ -9,4 +9,5 @@ let id = urlParams.get("id")
 myApi.getOneProduct(id).then(function(oneProduct) {
     let product = new DomManager(oneProduct)
     product.insertInProduct()
+    product.addListener()
 })

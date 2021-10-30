@@ -100,4 +100,48 @@ class DomManager {
             colorContainer.innerHTML += template
         }
     }
+    addListener() {
+        const cartProduct = {
+            id: this.oneProduct._id,
+            color: "",
+            quantity: ""
+        };
+
+        document.getElementById("addToCart").addEventListener("click", function() {
+            let toAddColor = document.getElementById("colors").value
+            let toAddQuantity = document.getElementById("quantity").value
+            if (toAddColor === "" || toAddQuantity === 0) {
+                alert("Please choose a color and a quantity")
+            } else {
+                cartProduct.color = toAddColor
+                cartProduct.quantity = toAddQuantity
+                let myCart = new Cart()
+                myCart.add(cartProduct)
+            }
+        })
+    }
+}
+
+class Cart {
+
+    constructor() {
+        this.storageKey = "cart"
+        this.content = []
+    }
+
+    get() {
+        this.content = localStorage.getItem(this.storageKey)
+        if (this.content === null) {
+            this.content = []
+        } else {
+            this.content = JSON.parse(this.content)
+        }
+    }
+
+    add(oneProduct) {
+        this.get()
+        let sotrageContent = this.content
+        sotrageContent.push(oneProduct)
+        localStorage.setItem(this.storageKey, JSON.stringify(sotrageContent))
+    }
 }
