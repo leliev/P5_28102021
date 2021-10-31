@@ -101,20 +101,21 @@ class DomManager {
         }
     }
     addListener() {
+
         const cartProduct = {
             id: this.oneProduct._id,
             color: "",
-            quantity: ""
+            quantity: 0
         };
-
         document.getElementById("addToCart").addEventListener("click", function() {
             let toAddColor = document.getElementById("colors").value
-            let toAddQuantity = document.getElementById("quantity").value
+            let toAddQuantity = parseInt(document.getElementById("quantity").value)
             if (toAddColor === "" || toAddQuantity === 0) {
                 alert("Please choose a color and a quantity")
             } else {
                 cartProduct.color = toAddColor
                 cartProduct.quantity = toAddQuantity
+                console.log("cartProduct : ", cartProduct)
                 let myCart = new Cart()
                 myCart.add(cartProduct)
             }
@@ -131,6 +132,7 @@ class Cart {
 
     get() {
         this.content = localStorage.getItem(this.storageKey)
+        console.log("cart inside get :", this.content)
         if (this.content === null) {
             this.content = []
         } else {
@@ -140,8 +142,19 @@ class Cart {
 
     add(oneProduct) {
         this.get()
-        let sotrageContent = this.content
-        sotrageContent.push(oneProduct)
-        localStorage.setItem(this.storageKey, JSON.stringify(sotrageContent))
+        let cartContent = this.content
+        console.log("cart inside add:", cartContent)
+        if (cartContent.length > 0) {
+            let index = cartContent.findIndex(product => product.id === oneProduct.id && product.color === oneProduct.color)
+            if (index !== -1) {
+                console.log("index trouvé", index)
+                cartContent[index].quantity = oneProduct.quantity + parseInt(cartContent[index].quantity)
+            } else {
+                cartContent.push(oneProduct)
+            }
+        } else {
+            cartContent.push(oneProduct)
+        }
+        localStorage.setItem(this.storageKey, JSON.stringify(cartContent))
     }
 }
