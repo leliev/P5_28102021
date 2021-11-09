@@ -101,11 +101,11 @@ class DomManager {
         }
     }
     addListener() {
-
+        let newId = "/" + this.oneProduct._id
         const cartProduct = {
-            id: this.oneProduct._id,
+            id: newId,
             color: "",
-            quantity: 0
+            quantity: 0 
         };
         document.getElementById("addToCart").addEventListener("click", function() {
             let toAddColor = document.getElementById("colors").value
@@ -115,11 +115,36 @@ class DomManager {
             } else {
                 cartProduct.color = toAddColor
                 cartProduct.quantity = toAddQuantity
-                console.log("cartProduct : ", cartProduct)
                 let myCart = new Cart()
                 myCart.add(cartProduct)
             }
         })
+    }
+
+    insertInCart(quantity) {
+        let container = document.getElementById("cart__items")
+        let template = 
+            `<article class="cart__item" data-id="{product-ID}">
+            <div class="cart__item__img">
+              <img src="${this.oneProduct.imageUrl}" alt="${this.oneProduct.altTxt}">
+            </div>
+            <div class="cart__item__content">
+              <div class="cart__item__content__titlePrice">
+                <h2>${this.oneProduct.name}</h2>
+                <p>${this.oneProduct.price}€</p>
+              </div>
+              <div class="cart__item__content__settings">
+                <div class="cart__item__content__settings__quantity">
+                  <p>Qté : </p>
+                  <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
+                </div>
+                <div class="cart__item__content__settings__delete">
+                  <p class="deleteItem">Supprimer</p>
+                </div>
+              </div>
+            </div>
+          </article>`
+          container.innerHTML += template 
     }
 }
 
@@ -132,7 +157,6 @@ class Cart {
 
     get() {
         this.content = localStorage.getItem(this.storageKey)
-        console.log("cart inside get :", this.content)
         if (this.content === null) {
             this.content = []
         } else {
@@ -143,11 +167,9 @@ class Cart {
     add(oneProduct) {
         this.get()
         let cartContent = this.content
-        console.log("cart inside add:", cartContent)
         if (cartContent.length > 0) {
             let index = cartContent.findIndex(product => product.id === oneProduct.id && product.color === oneProduct.color)
             if (index !== -1) {
-                console.log("index trouvé", index)
                 cartContent[index].quantity = oneProduct.quantity + parseInt(cartContent[index].quantity)
             } else {
                 cartContent.push(oneProduct)
@@ -156,5 +178,15 @@ class Cart {
             cartContent.push(oneProduct)
         }
         localStorage.setItem(this.storageKey, JSON.stringify(cartContent))
+    }
+
+    cartTotals() {
+        let quantities = document.getElementsByName("itemQuantity")
+        console.log(quantities)
+        console.log(quantities.length)
+        for (let i = 0; i < quantities.length; i++) {
+            const element = quantities[i];
+            alert(element.value)
+        }
     }
 }
