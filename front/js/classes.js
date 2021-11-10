@@ -27,6 +27,18 @@ class API {
         let response = await fetch(this.url + id)
         return response.json()
     }
+
+    async postOrder(orderBody) {
+        let response = await fetch(this.url + "/order" , {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderBody),
+        })
+        return response.json();
+    }
 }
 
 /**
@@ -101,9 +113,13 @@ class DomManager {
         }
     }
     addListener() {
-        let newId = "/" + this.oneProduct._id
         const cartProduct = {
-            id: newId,
+            id: this.oneProduct._id,
+            name: this.oneProduct.name,
+            price: this.oneProduct.price,
+            imageUrl: this.oneProduct.imageUrl,
+            description: this.oneProduct.description,
+            altTxt: this.oneProduct.altTxt,
             color: "",
             quantity: 0 
         };
@@ -120,39 +136,14 @@ class DomManager {
             }
         })
     }
-
-    insertInCart(quantity) {
-        let container = document.getElementById("cart__items")
-        let template = 
-            `<article class="cart__item" data-id="{product-ID}">
-            <div class="cart__item__img">
-              <img src="${this.oneProduct.imageUrl}" alt="${this.oneProduct.altTxt}">
-            </div>
-            <div class="cart__item__content">
-              <div class="cart__item__content__titlePrice">
-                <h2>${this.oneProduct.name}</h2>
-                <p>${this.oneProduct.price}€</p>
-              </div>
-              <div class="cart__item__content__settings">
-                <div class="cart__item__content__settings__quantity">
-                  <p>Qté : </p>
-                  <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
-                </div>
-                <div class="cart__item__content__settings__delete">
-                  <p class="deleteItem">Supprimer</p>
-                </div>
-              </div>
-            </div>
-          </article>`
-          container.innerHTML += template 
-    }
 }
 
 class Cart {
 
     constructor() {
-        this.storageKey = "cart"
-        this.content = []
+        this.storageKey = "cart";
+        this.content = [];
+        this.get();
     }
 
     get() {
@@ -165,28 +156,51 @@ class Cart {
     }
 
     add(oneProduct) {
-        this.get()
         let cartContent = this.content
         if (cartContent.length > 0) {
             let index = cartContent.findIndex(product => product.id === oneProduct.id && product.color === oneProduct.color)
             if (index !== -1) {
                 cartContent[index].quantity = oneProduct.quantity + parseInt(cartContent[index].quantity)
+                alert("Product quantity changed")
             } else {
                 cartContent.push(oneProduct)
+                alert("Product added to cart")
             }
         } else {
             cartContent.push(oneProduct)
+            alert("Product added to cart")
         }
         localStorage.setItem(this.storageKey, JSON.stringify(cartContent))
     }
+}
+class Form {
+    constructor() {
+      this.firstName = document.getElementById('firstName').value;
+      this.lastName = document.getElementById('lastName').value;
+      this.address = document.getElementById('address').value;
+      this.city = document.getElementById('city').value;
+      this.email = document.getElementById('email').value;
+    }
+}
 
-    cartTotals() {
-        let quantities = document.getElementsByName("itemQuantity")
-        console.log(quantities)
-        console.log(quantities.length)
-        for (let i = 0; i < quantities.length; i++) {
-            const element = quantities[i];
-            alert(element.value)
+class regEx {
+    constructor(regEx, field, errMsg) {
+        this.regEx = regEx;
+        this.field = field;
+        this.errMsg = errMsg;
+    }
+    isValid(testValue) {
+        let field = this.field;
+        console.log(testValue)
+        let msgField = field + "ErrorMsg";
+        let msgContainer = document.getElementById(msgField);
+        if (this.regEx.test(testValue)) {
+            msgContainer.innerText = '';
+            validCounter++;
+            console.log(validCounter)
+        } else {
+            msgContainer.innerText = this.errMsg;
+            msgContainer.style.color = 'red';
         }
     }
 }
