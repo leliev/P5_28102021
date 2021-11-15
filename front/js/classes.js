@@ -59,7 +59,32 @@ class DomManager {
      * @param {String} oneProduct.altTxt
      */
     constructor(oneProduct) {
-        this.oneProduct = oneProduct
+        this.oneProduct = oneProduct;
+    }
+    static insertInCart(cartProduct) {
+        let container = document.getElementById("cart__items");
+        let template = 
+            `<article class="cart__item" data-id="${cartProduct.id}">
+                <div class="cart__item__img">
+                    <img src="${cartProduct.imageUrl}" alt="${cartProduct.altTxt}">
+                </div>
+                <div class="cart__item__content">
+                    <div class="cart__item__content__titlePrice">
+                        <h2>${cartProduct.name}</h2>
+                        <p>${cartProduct.price}€</p>
+                    </div>
+                    <div class="cart__item__content__settings">
+                        <div class="cart__item__content__settings__quantity">
+                        <p>Qté : </p>
+                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cartProduct.quantity}">
+                        </div>
+                        <div class="cart__item__content__settings__delete">
+                        <p class="deleteItem">Supprimer</p>
+                        </div>
+                    </div>
+                </div>
+            </article>`;
+        container.innerHTML += template;
     }
     /**
      * Insert one product into index.html by adding the template at the given place(id:items")
@@ -283,7 +308,7 @@ class regEx {
     /**
      * Test a form field value for validation
      * Set the error message if fail
-     * @param {String} testValue
+     * @param {String} testValue Input from user
      * @method
      */
     isValid(testValue) {

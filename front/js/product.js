@@ -1,5 +1,10 @@
 let myApi = new API()
 
+/**
+ * Get the product id from URL
+ * Or alert error message
+ * @function
+ */
 function getProductId() {
     //Get the product id stored in the search param of the url
     const queryString = window.location.search;

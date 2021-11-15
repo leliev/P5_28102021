@@ -17,51 +17,22 @@ let addrTest = new regEx(addrRegEx, "address", addrErrMsg);
 let cityTest = new regEx(nameRegEx, "city", nameErrMsg);
 let mailTest = new regEx(mailRegEx, "email", mailErrMesg);
 /**
- * Insert a product from local storage in cart page
- * @param {Object[]} cartProduct cartProduct in localstorage from addListener
- */
-function insertInCart(cartProduct) {
-    let container = document.getElementById("cart__items");
-    let template = 
-        `<article class="cart__item" data-id="${cartProduct.id}">
-        <div class="cart__item__img">
-          <img src="${cartProduct.imageUrl}" alt="${cartProduct.altTxt}">
-        </div>
-        <div class="cart__item__content">
-          <div class="cart__item__content__titlePrice">
-            <h2>${cartProduct.name}</h2>
-            <p>${cartProduct.price}€</p>
-          </div>
-          <div class="cart__item__content__settings">
-            <div class="cart__item__content__settings__quantity">
-              <p>Qté : </p>
-              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cartProduct.quantity}">
-            </div>
-            <div class="cart__item__content__settings__delete">
-              <p class="deleteItem">Supprimer</p>
-            </div>
-          </div>
-        </div>
-      </article>`
-      container.innerHTML += template;
-}
-/**
  * Loop through cart array in localstorage to add them to page
  * Update cart totals accordingly
  * @function
  */
 function cartPrinter() {
     myCart.content.forEach(function(cartProduct) {
-        insertInCart(cartProduct);
+        DomManager.insertInCart(cartProduct);
         totalP += parseInt(cartProduct.quantity) * parseInt(cartProduct.price);
         totalQ += parseInt(cartProduct.quantity);
     })
+    myCart.totals(totalQ, totalP);
+    myCart.changeHandler();
+    myCart.deleteHandler();   
 }
 cartPrinter();
 
-myCart.totals(totalQ, totalP);
-myCart.changeHandler();
-myCart.deleteHandler();
 /**
  * Check validity of the entire form
  * If valid send to API and redirect to confiration page
@@ -69,12 +40,10 @@ myCart.deleteHandler();
  * @function
  */
 function orderValidation() {
-    let orderBtn = document.getElementById("order")
+    let orderBtn = document.getElementById("order");
     orderBtn.addEventListener("click", function(event){
         event.preventDefault();
-
         let contact = new Form();
-
         fNameTest.isValid(contact.firstName);
         lNameTest.isValid(contact.lastName);
         addrTest.isValid(contact.address);
