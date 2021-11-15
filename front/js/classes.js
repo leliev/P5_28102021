@@ -244,7 +244,7 @@ class Cart {
      * @param {Number} totalP
      * @method
      */
-    Totals(totalQ, totalP) {
+    totals(totalQ, totalP) {
         let containerQ = document.getElementById("totalQuantity");
         let containerP = document.getElementById("totalPrice");
         containerQ.innerHTML += totalQ;
@@ -269,6 +269,12 @@ class Form {
  * @classdesc Creates an object with validation variables
  */
 class regEx {
+    /**
+     * @param {RegExp} regEx 
+     * @param {String} field 
+     * @param {String} errMsg 
+     * @constructor
+     */
     constructor(regEx, field, errMsg) {
         this.regEx = regEx;
         this.field = field;

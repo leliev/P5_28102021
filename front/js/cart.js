@@ -59,7 +59,7 @@ function cartPrinter() {
 }
 cartPrinter();
 
-myCart.Totals(totalQ, totalP);
+myCart.totals(totalQ, totalP);
 myCart.changeHandler();
 myCart.deleteHandler();
 /**
