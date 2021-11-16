@@ -42,6 +42,7 @@ class API {
         return response.json();
     }
 }
+
 /**
  * @class
  * @classdesc Manage the dom elements
@@ -165,6 +166,7 @@ class DomManager {
         })
     }
 }
+
 /**
  * @class
  * @classdesc Manage the cart array in localstorage
@@ -276,51 +278,80 @@ class Cart {
         containerP.innerHTML += totalP;
     }
 }
+
 /**
  * @class
  * @classdesc Creates an object with cart page form data
  */
 class Form {
     constructor() {
-      this.firstName = document.getElementById("firstName").value;
-      this.lastName = document.getElementById("lastName").value;
-      this.address = document.getElementById("address").value;
-      this.city = document.getElementById("city").value;
-      this.email = document.getElementById("email").value;
+        this.firstName = document.getElementById("firstName").value;
+        this.lastName = document.getElementById("lastName").value;
+        this.address = document.getElementById("address").value;
+        this.city = document.getElementById("city").value;
+        this.email = document.getElementById("email").value;
+        this.fieldNbr = Object.values(this).length;
+        //Variable needed for total form validation
+        this.validCounter = 0
+
+        this.param = [
+            [
+                /^[-'a-zA-ZÀ-ÖØ-öø-ÿ\s]{3,}$/,
+                "At least 3 characters and letters only"
+            ],
+            [
+                /^[-'a-zA-Z0-9À-ÖØ-öø-ÿ\s]{3,}$/,
+                "At least 3 characters and valid address format"
+            ],
+            [
+                /^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/,
+                "Must be valid e-mail address exemple@exemple.com"
+            ]
+        ]
     }
-}
-/**
- * @class
- * @classdesc Creates an object with validation variables
- */
-class regEx {
     /**
-     * @param {RegExp} regEx 
-     * @param {String} field 
-     * @param {String} errMsg 
-     * @constructor
+     * Check every fields using form.isValid method
+     * @returns {Number} Number of form fields validated
+     * @method
      */
-    constructor(regEx, field, errMsg) {
-        this.regEx = regEx;
-        this.field = field;
-        this.errMsg = errMsg;
+    validform() {
+        let formFields = Object.keys(this);
+        let formValues = Object.values(this);
+        for (let index = 0; index < formFields.length; index++) {
+            switch (formFields[index]) {
+                case "firstName":
+                case "lastName":
+                case "city":
+                    this.isValid(formFields[index], formValues[index], this.param[0]);
+                    break;
+                case "address":
+                    this.isValid(formFields[index], formValues[index], this.param[1]);
+                    break;
+                case "email":
+                    this.isValid(formFields[index], formValues[index], this.param[2]);
+                    break
+                default:
+                    break;
+            }   
+        }
+        return this.validCounter
     }
     /**
      * Test a form field value for validation
      * Set the error message if fail
-     * @param {String} testValue Input from user
+     * @param {String} key key of form object
+     * @param {String} value Input from user
+     * @param {Array} array RegExp and error messages 
      * @method
      */
-    isValid(testValue) {
-        let field = this.field;
-        let msgField = field + "ErrorMsg";
+    isValid(key, value, array) {
+        let msgField = key + "ErrorMsg";
         let msgContainer = document.getElementById(msgField);
-        if (this.regEx.test(testValue)) {
+        if (array[0].test(value)) {
             msgContainer.innerText = "";
-            //Variable needed for total form validation
-            validCounter++;
+            this.validCounter++;
         } else {
-            msgContainer.innerText = this.errMsg;
+            msgContainer.innerText = array[1];
             msgContainer.style.color = "red";
         }
     }
