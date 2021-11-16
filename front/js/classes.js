@@ -62,6 +62,10 @@ class DomManager {
     constructor(oneProduct) {
         this.oneProduct = oneProduct;
     }
+    /**
+     * Insert one cartProduct object in cart.html by adding the template at the given place
+     * @param {Object} cartProduct Formated by addListener() method
+     */
     static insertInCart(cartProduct) {
         let container = document.getElementById("cart__items");
         let template = 
@@ -73,6 +77,9 @@ class DomManager {
                     <div class="cart__item__content__titlePrice">
                         <h2>${cartProduct.name}</h2>
                         <p>${cartProduct.price}€</p>
+                    </div>
+                    <div>
+                        <p>Color : ${cartProduct.color}</p>
                     </div>
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
@@ -175,7 +182,7 @@ class Cart {
     //Initialyse the localstorage and get content if present
     constructor() {
         this.storageKey = "cart";
-        this.content = [];
+        //this.content = [];
         this.get();
     }
     /**
@@ -266,7 +273,7 @@ class Cart {
         }
     }
     /**
-     * Push totals in cart page
+     * Push totals (total price and total quantity) in cart page
      * @param {Number} totalQ 
      * @param {Number} totalP
      * @method
