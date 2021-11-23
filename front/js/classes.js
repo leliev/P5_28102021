@@ -101,7 +101,7 @@ class DomManager {
     insertInIndex() {
         let productContainer = document.getElementById("items");
         let template = 
-            `<a href="./product.html?id=/${this.oneProduct._id}">
+            `<a href="./html/product.html?id=/${this.oneProduct._id}">
                 <article>
                 <img src="${this.oneProduct.imageUrl}" alt="${this.oneProduct.altTxt}">
                 <h3 class="productName">${this.oneProduct.name}</h3>
