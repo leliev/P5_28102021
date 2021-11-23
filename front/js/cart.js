@@ -31,7 +31,7 @@ function orderValidation() {
     orderBtn.addEventListener("click", function(event){
         event.preventDefault();
         let contact = new Form();
-        contact.validform()
+        contact.validForm()
         if (contact.validCounter !== contact.fieldNbr) {
             alert("Contact form is not valid");
         } else {

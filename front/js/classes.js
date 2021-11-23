@@ -321,7 +321,7 @@ class Form {
      * @returns {Number} Number of form fields validated
      * @method
      */
-    validform() {
+    validForm() {
         let formFields = Object.keys(this);
         let formValues = Object.values(this);
         for (let index = 0; index < formFields.length; index++) {
