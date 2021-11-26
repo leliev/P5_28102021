@@ -79,7 +79,7 @@ class DomManager {
                         <p>${cartProduct.price}€</p>
                     </div>
                     <div>
-                        <p>Color : ${cartProduct.color}</p>
+                        <p>Couleur : ${cartProduct.color}</p>
                     </div>
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
