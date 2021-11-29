@@ -68,6 +68,7 @@ class DomManager {
      */
     static insertInCart(cartProduct) {
         let container = document.getElementById("cart__items");
+        let articlesP = cartProduct.quantity * cartProduct.price;
         let template = 
             `<article class="cart__item" data-id="${cartProduct.id}">
                 <div class="cart__item__img">
@@ -76,7 +77,7 @@ class DomManager {
                 <div class="cart__item__content">
                     <div class="cart__item__content__titlePrice">
                         <h2>${cartProduct.name}</h2>
-                        <p>${cartProduct.price}€</p>
+                        <p>${articlesP}€</p>
                     </div>
                     <div>
                         <p>Couleur : ${cartProduct.color}</p>
